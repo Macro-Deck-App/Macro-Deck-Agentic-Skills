@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Keep one entry per platform the plugin supports; see references/release-workflow.md.
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@<CHECKOUT_SHA> # <CHECKOUT_VERSION>
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@<SETUP_DOTNET_SHA> # <SETUP_DOTNET_VERSION>
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: dotnet build <SOLUTION> -c Release -warnaserror
+
+      - name: Test
+        run: dotnet test <SOLUTION> -c Release --no-build
+
+      - name: Install the plugin CLI
+        run: dotnet tool install --global MacroDeck.Plugin.Cli --version <CLI_VERSION>
+
+      # Proves the conformance suite on every supported platform before a release does.
+      - name: Conformance
+        run: macrodeck-plugin test --project <SOURCE> --required-only
+
+  package:
+    name: Pack and validate
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@<CHECKOUT_SHA> # <CHECKOUT_VERSION>
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@<SETUP_DOTNET_SHA> # <SETUP_DOTNET_VERSION>
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install the plugin CLI
+        run: dotnet tool install --global MacroDeck.Plugin.Cli --version <CLI_VERSION>
+
+      - name: Build the package
+        run: macrodeck-plugin build --source <SOURCE> --output ./artifacts
+
+      - name: Validate the package
+        run: macrodeck-plugin validate --level publication --artifact ./artifacts/*.macroDeckPlugin
