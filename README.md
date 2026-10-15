@@ -1,4 +1,4 @@
-# Macro Deck Agentic Skills
+# Macro Deck Skills
 
 Reusable agent skills for developing extensions and integrations for Macro Deck.
 
@@ -19,7 +19,7 @@ For installation and update management with GitHub CLI, use GitHub CLI 2.90.0 or
 Install the plugin creator skill with:
 
 ```bash
-gh skill install Macro-Deck-App/Macro-Deck-Agentic-Skills macro-deck-plugin-creator
+gh skill install Macro-Deck-App/Macro-Deck-Skills macro-deck-plugin-creator
 ```
 
 `gh skill` can install the skill into the location expected by the selected agent host. To target a specific supported agent, use its `--agent` option.
@@ -27,7 +27,7 @@ gh skill install Macro-Deck-App/Macro-Deck-Agentic-Skills macro-deck-plugin-crea
 For example:
 
 ```bash
-gh skill install Macro-Deck-App/Macro-Deck-Agentic-Skills macro-deck-plugin-creator --agent claude-code
+gh skill install Macro-Deck-App/Macro-Deck-Skills macro-deck-plugin-creator --agent claude-code
 ```
 
 Run `gh skill install --help` to see the agent identifiers supported by your installed GitHub CLI version.
@@ -37,13 +37,13 @@ Run `gh skill install --help` to see the agent identifiers supported by your ins
 If you do not use `gh skill`, install the skill by copying its directory into the skills location of your agent host.
 
 ```bash
-git clone https://github.com/Macro-Deck-App/Macro-Deck-Agentic-Skills.git
+git clone https://github.com/Macro-Deck-App/Macro-Deck-Skills.git
 ```
 
 Then copy `skills/macro-deck-plugin-creator` (the whole directory, including `references/`, `scripts/` and `templates/`) into the host's skills directory, either per user or per project. For Claude Code, for example, that is `~/.claude/skills/` or `<project>/.claude/skills/`:
 
 ```bash
-cp -R Macro-Deck-Agentic-Skills/skills/macro-deck-plugin-creator ~/.claude/skills/
+cp -R Macro-Deck-Skills/skills/macro-deck-plugin-creator ~/.claude/skills/
 ```
 
 The directory name must stay `macro-deck-plugin-creator`. Other hosts (Codex, OpenCode, GitHub Copilot) use their own skills locations; see the host's documentation, or run `gh skill install --help` to see the supported agents and their targets.
@@ -71,7 +71,7 @@ gh skill update --all
 For environments that need reproducible skill versions, install a tagged version instead of tracking the latest version.
 
 ```bash
-gh skill install Macro-Deck-App/Macro-Deck-Agentic-Skills macro-deck-plugin-creator@v1.0.0
+gh skill install Macro-Deck-App/Macro-Deck-Skills macro-deck-plugin-creator@v1.0.0
 ```
 
 Pinned skills are not changed by normal `gh skill update` operations.
